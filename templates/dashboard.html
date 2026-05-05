@@ -1,0 +1,42 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="max-w-2xl mx-auto">
+
+    <form method="POST" action="/add/" class="flex gap-2 mb-6">
+        {% csrf_token %}
+        <input name="title" placeholder="New task..."
+               class="flex-1 p-2 border rounded">
+
+        <select name="priority" class="p-2 border rounded">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+
+        <button class="bg-blue-500 text-white px-4 rounded">Add</button>
+    </form>
+
+    <div class="space-y-3">
+        {% for task in tasks %}
+        <div class="p-4 bg-white rounded shadow flex justify-between items-center">
+            <div>
+                <p class="{% if task.completed %}line-through text-gray-400{% endif %}">
+                    {{ task.title }}
+                </p>
+                <small class="text-gray-500">{{ task.priority }}</small>
+            </div>
+
+            <div class="flex gap-2">
+                <a href="/toggle/{{task.id}}" class="text-green-500">✔</a>
+                <a href="/delete/{{task.id}}" class="text-red-500">✖</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
